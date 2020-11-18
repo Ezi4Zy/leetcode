@@ -5,7 +5,24 @@
 #
 
 # @lc code=start
+
 class Solution(object):
+    def maxSumDivThree(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        state = [0, 0, 0]
+        for num in nums:
+            if num % 3 == 0:
+                state[0] , state[1], state[2] = state[0] + num, state[1] + num if state[1] else 0, state[2] + num if state[2] else 0
+            if num % 3 == 1:
+                state[0], state[1], state[2] = max(state[2] + num if state[2] else 0, state[0]), max(state[0] + num, state[1]), max(state[1] + num if state[1] else 0, state[2])
+            if num % 3 == 2:
+                state[0], state[1], state[2] = max(state[1] + num if state[1] else 0, state[0]), max(state[2] + num if state[2] else 0, state[1]), max(state[0] + num, state[2])
+        return state[0]
+
+class Solution1(object):
 
     def get_min_2_sum(self, nums):
         min_2_sum = 0

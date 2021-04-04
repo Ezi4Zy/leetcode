@@ -6,8 +6,86 @@
 
 # @lc code=start
 
+class DLinksNode():
+    def __init__(self, key=0, value=0):
+        self.key = key
+        self.value = value
+        self.prev = None
+        self.next = None
 
 class LRUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.capacity = capacity
+        self.size = 0
+        self.cache_map = {}
+        self.head = DLinksNode()
+        self.tail = DLinksNode()
+        self.head.next = self.tail
+        self.tail.prev = self.head
+    
+    def delete_node(self, node):
+        node_prev = node.prev
+        node_next = node.next
+        node_prev.next, node_next.prev = node_next, node_prev
+        node.next = node.prev = None
+        n = self.head
+
+    
+    def fresh_node(self, node):
+        node_prev = self.head
+        node_next = self.head.next
+        node_prev.next = node
+        node.prev = node_prev
+        node_next.prev = node
+        node.next = node_next
+
+
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        if key in self.cache_map:
+            node = self.cache_map[key]
+            self.delete_node(node)
+            self.fresh_node(node)
+            return node.value
+        else:
+            return -1
+        
+
+
+    def put(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: None
+        """
+        if key in self.cache_map:
+            node = self.cache_map[key]
+            node.value = value
+            self.delete_node(node)
+        else:
+            node = DLinksNode(key, value)
+            self.cache_map[key] = node
+            self.size += 1
+        self.fresh_node(node)
+        if self.size > self.capacity:
+            node = self.tail.prev
+            self.cache_map.pop(node.key)
+            self.delete_node(node)
+            self.size -= 1
+
+        
+
+
+
+class LRUCache1(object):
 
     def __init__(self, capacity):
         """

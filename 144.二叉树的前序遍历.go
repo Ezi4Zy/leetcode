@@ -15,7 +15,6 @@
  */
 package main
 
-
 func preorderTraversal(root *TreeNode) []int {
 	ret := []int{}
 	if root != nil {

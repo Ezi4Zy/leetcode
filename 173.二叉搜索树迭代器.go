@@ -20,29 +20,33 @@ package main
 // Right *TreeNode
 // }
 type BSTIterator struct {
-	Nodes []*TreeNode
-	Index int
+	vals []*TreeNode
 }
 
 func Constructor(root *TreeNode) BSTIterator {
 	iterator := BSTIterator{}
-	if root != nil {
-		iterator.Nodes = append(iterator.Nodes, Constructor(root.Left).Nodes...)
-		iterator.Nodes = append(iterator.Nodes, root)
-		iterator.Nodes = append(iterator.Nodes, Constructor(root.Right).Nodes...)
-	}
+	iterator.inorder(root)
 	return iterator
 }
 
-func (this *BSTIterator) Next() int {
-	val := this.Nodes[this.Index].Val
-	this.Index++
-	return val
+func (this *BSTIterator) inorder(root *TreeNode) {
+	if root == nil {
+		return
+	}
+	this.inorder(root.Left)
+	this.vals = append(this.vals, root)
+	this.inorder(root.Right)
 
 }
 
+func (this *BSTIterator) Next() int {
+	val := this.vals[0].Val
+	this.vals = this.vals[1:]
+	return val
+}
+
 func (this *BSTIterator) HasNext() bool {
-	return this.Index != len(this.Nodes)
+	return len(this.vals) != 0
 }
 
 /**

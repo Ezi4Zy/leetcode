@@ -7,13 +7,17 @@
 // @lc code=start
 package main
 
+import (
+	"strings"
+)
+
 type Node struct {
 	name string
 	next *Node
 	pre  *Node
 }
 
-func simplifyPath(path string) string {
+func simplifyPath1(path string) string {
 	head := &Node{
 		name: "",
 	}
@@ -54,6 +58,26 @@ func simplifyPath(path string) string {
 		head = head.next
 	}
 	return ret
+}
+
+func simplifyPath(path string) string {
+	realPaths := []string{}
+	paths := strings.Split(path, "/")
+	for i := 0; i < len(paths); i++ {
+		path = paths[i]
+		if path == "" || path == "." {
+			continue
+		}
+		if path == ".." {
+			if len(realPaths) > 0 {
+				realPaths = realPaths[:len(realPaths)-1]
+			}
+			continue
+		}
+		realPaths = append(realPaths, path)
+	}
+
+	return "/" + strings.Join(realPaths, "/")
 }
 
 // func main() {

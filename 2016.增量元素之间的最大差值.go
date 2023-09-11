@@ -11,6 +11,21 @@ import "fmt"
 // @lc code=start
 func maximumDifference(nums []int) int {
 	ret := -1
+	minNum := nums[0]
+	for _, num := range nums {
+		if num < minNum {
+			minNum = num
+		} else {
+			if num-minNum > 0 && num-minNum > ret {
+				ret = num - minNum
+			}
+		}
+	}
+	return ret
+}
+
+func maximumDifference1(nums []int) int {
+	ret := -1
 	for i := 0; i < len(nums)-1; i++ {
 		for j := i + 1; j < len(nums); j++ {
 			if nums[j] > nums[i] {
